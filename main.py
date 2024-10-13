@@ -1,14 +1,15 @@
 import gi
-
 gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk, Gdk
-
 
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
         super().__init__(application=app)
         self.set_title("Visual Workflow Automation Tool")
         self.set_default_size(800, 600)
+
+        self.selected_node = None
+        self.setup_css()
 
         # Create the main layout
         self.layout = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -22,28 +23,49 @@ class MainWindow(Gtk.ApplicationWindow):
         self.canvas = self.create_canvas()
         self.layout.append(self.canvas)
 
+    def setup_css(self):
+        self.css_provider = Gtk.CssProvider()
+        css = """
+        #node-button {
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        #node-button:selected {
+            border: 2px solid yellow;
+        }
+        """
+        self.css_provider.load_from_data(css.encode('utf-8'))
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(),
+            self.css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+
     def create_node_library(self):
-        # Placeholder for node library UI
-        panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        panel.set_size_request(200, -1)
-        label = Gtk.Label(label="Node Library")
-        panel.append(label)
-        # Add node items here
-        return panel
+        # (Code as shown in Step 1)
+        # ...
 
     def create_canvas(self):
-        # Placeholder for canvas UI
-        canvas = Gtk.DrawingArea()
-        canvas.set_content_width(600)
-        canvas.set_content_height(600)
-        canvas.set_draw_func(self.draw_canvas)
-        return canvas
+        # (Code as shown in Step 2)
+        # ...
 
-    def draw_canvas(self, area, ctx, width, height):
-        # Drawing code for the canvas
-        ctx.set_source_rgb(1, 1, 1)  # White background
-        ctx.paint()
+    def on_canvas_drag_data_received(self, widget, drag_context, x, y, data, info, time):
+        # (Code as shown in Step 3)
+        # ...
 
+    def on_node_drag_begin(self, gesture, node_widget):
+        # (Code as shown in Step 3)
+        # ...
+
+    def on_node_drag_update(self, gesture, offset_x, offset_y, node_widget):
+        # (Code as shown in Step 3)
+        # ...
+
+    def on_node_clicked(self, gesture, n_press, x, y, node_widget):
+        # (Code as shown in Step 4)
+        # ...
 
 class WorkflowApp(Gtk.Application):
     def __init__(self):
@@ -52,7 +74,6 @@ class WorkflowApp(Gtk.Application):
     def do_activate(self):
         win = MainWindow(self)
         win.show()
-
 
 if __name__ == '__main__':
     app = WorkflowApp()
